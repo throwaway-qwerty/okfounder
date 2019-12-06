@@ -1,7 +1,7 @@
 import React from 'react'
 import db from '../data/database'
 import LikeButton from '../LikeButton'
-import { Box, Badge, Icon } from "@chakra-ui/core";
+import { Box, Badge, Icon, Link } from "@chakra-ui/core";
 
 
 const Card = ({title, user, likes, ID, ratings, ...rest}) => {
@@ -12,7 +12,11 @@ const Card = ({title, user, likes, ID, ratings, ...rest}) => {
     const handleLike = (ID, isLikedByCurrentUser) => {
       if (!username) alert("Please sign in!")
 
-      db.update("posts", { ID }, post => {
+      db.update("posts", { ID, user }, post => {
+        if (user === username) {
+          alert("Sorry, you can't like your own Post.")
+          return
+        }
         if (!isLikedByCurrentUser) {
           post.likes.push(username)
         } else {
@@ -74,7 +78,14 @@ const Card = ({title, user, likes, ID, ratings, ...rest}) => {
             <Box as="span" color="gray.600" fontSize="sm">
               Founders Interested{" "}
             </Box>
-            {likes.map((like, i) => <>{like}{likes.length - 1 !== i && ', '}</>)}
+            {likes.length === 0 ? 0 : likes.map((like, i) => {
+              return (
+                <>
+                  <Link href={`all-posts?user=${like}`}>{like}</Link>
+                  {likes.length - 1 !== i && ", "}
+                </>
+              )
+            })}
           </Box>
           <Box d="flex" mt="2" alignItems="center">	      
             {Array(5)	            

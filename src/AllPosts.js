@@ -12,7 +12,16 @@ const AllPosts = ({ username }) => {
 
   // Maybe add sorting functionality in the future
   const fetchPosts = () => {
-    const posts = db.queryAll("posts")
+    const posts = db.queryAll("posts", {
+      query: (post) => {
+        const user = new URLSearchParams(window.location.search).get("user")
+        if (user) {
+          return post.user === user
+        } else {
+          return true
+        }
+      }
+    })
     setPosts(posts)
   }
 

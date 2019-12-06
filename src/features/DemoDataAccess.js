@@ -27,7 +27,7 @@ export default class DataAccessDemo extends React.Component {
     const post = {
       title: title,
       user: this.props.username,
-      likes: [this.props.username],
+      likes: [],
       ratings: []
     }
     db.insert("posts", post)
