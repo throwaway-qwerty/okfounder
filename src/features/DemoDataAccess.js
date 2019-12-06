@@ -27,7 +27,8 @@ export default class DataAccessDemo extends React.Component {
     const post = {
       title: title,
       user: this.props.username,
-      likes: [this.props.username]
+      likes: [this.props.username],
+      ratings: []
     }
     db.insert("posts", post)
     db.commit()
@@ -56,7 +57,7 @@ export default class DataAccessDemo extends React.Component {
     const { username } = this.props
     if (!posts) return <Text>No posts yet</Text>
     return posts.map((post, index) => (
-      <Card {...post} key={index} username={username} setLikes={this.fetchUserPosts}></Card>
+      <Card {...post} key={index} username={username} fetchPosts={this.fetchUserPosts}></Card>
     ))
   }
 

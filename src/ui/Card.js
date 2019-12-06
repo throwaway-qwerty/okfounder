@@ -1,11 +1,13 @@
 import React from 'react'
 import db from '../data/database'
 import LikeButton from '../LikeButton'
-import { Box, Image, Flex, Badge, Text, Button, Icon } from "@chakra-ui/core";
+import { Box, Badge, Icon } from "@chakra-ui/core";
 
 
-const Card = ({title, user, likes, ID, username, ...rest}) => {
-    const { setLikes } = rest
+const Card = ({title, user, likes, ID, ratings, ...rest}) => {
+    const { fetchPosts, username } = rest
+
+    const rating = ratings.length ? ratings.reduce((x = 0, y) => x + y) / ratings.length : 0
   
     const handleLike = (ID, isLikedByCurrentUser) => {
       if (!username) alert("Please sign in!")
@@ -21,7 +23,17 @@ const Card = ({title, user, likes, ID, username, ...rest}) => {
       })
 
       db.commit()
-      setLikes()
+      fetchPosts()
+    }
+
+    // Rating system is pretty bad, same user can rate multiple times
+    const handleRating = (n) => {
+      db.update("posts", { ID }, post => {
+        post.ratings.push(n)
+      })
+
+      db.commit()
+      fetchPosts()
     }
  
     return (
@@ -62,7 +74,23 @@ const Card = ({title, user, likes, ID, username, ...rest}) => {
             <Box as="span" color="gray.600" fontSize="sm">
               Founders Interested{" "}
             </Box>
-            {likes.length}
+            {likes.map((like, i) => <>{like}{likes.length - 1 !== i && ', '}</>)}
+          </Box>
+          <Box d="flex" mt="2" alignItems="center">	      
+            {Array(5)	            
+              .fill("")	          
+              .map((_, i) => (	
+                <Icon	
+                  name="star"	
+                  key={i}	
+                  cursor="pointer"
+                  color={i < rating ? "teal.500" : "gray.300"}	
+                  onClick={() => handleRating(i + 1)}
+                />	
+              ))}	
+            <Box as="span" ml="2" color="gray.600" fontSize="sm">	
+              {ratings.length} reviews	
+            </Box>
           </Box>
         </Box>
       </Box>

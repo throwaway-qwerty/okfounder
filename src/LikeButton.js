@@ -1,11 +1,11 @@
 import React from 'react'
-import { Icon } from '@chakra-ui/core'
+import { FaHeart } from "react-icons/fa"
 
 const LikeButton = ({ likes, ID, handleLike }) => {
   const username = localStorage.getItem("username") || null
   const isLikedByCurrentUser = !!likes.find(like => like === username)
   
-  return <Icon cursor="pointer" name="star" color={isLikedByCurrentUser ? 'gold' : ''} onClick={() => handleLike(ID, isLikedByCurrentUser) } />
+  return <FaHeart cursor="pointer" color={isLikedByCurrentUser ? 'tomato' : 'gray'} onClick={() => handleLike(ID, isLikedByCurrentUser) } />
 }
 
 export default LikeButton

@@ -10,6 +10,7 @@ const AllPosts = ({ username }) => {
     return fetchPosts()
   }, [])
 
+  // Maybe add sorting functionality in the future
   const fetchPosts = () => {
     const posts = db.queryAll("posts")
     setPosts(posts)
@@ -17,7 +18,7 @@ const AllPosts = ({ username }) => {
 
   return posts ? (
     posts.map((post, index) => (
-      <Card {...post} key={index} username={username} setLikes={fetchPosts}></Card>
+      <Card {...post} key={index} username={username} fetchPosts={fetchPosts}></Card>
     ))
   ) : (
     <Text>Getting Posts...</Text>
