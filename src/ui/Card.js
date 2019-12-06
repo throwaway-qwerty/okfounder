@@ -1,21 +1,46 @@
 import React from 'react'
-import { Box, Image, Flex, Badge, Text, Button, StarIcon, Icon } from "@chakra-ui/core";
+import db from '../data/database'
+import LikeButton from '../LikeButton'
+import { Box, Image, Flex, Badge, Text, Button, Icon } from "@chakra-ui/core";
 
 
-const Card = ({title, author}) => {
+const Card = ({title, user, likes, ID, username, ...rest}) => {
+    const { setLikes } = rest
+  
+    const handleLike = (ID, isLikedByCurrentUser) => {
+      if (!username) alert("Please sign in!")
+
+      db.update("posts", { ID }, post => {
+        if (!isLikedByCurrentUser) {
+          post.likes.push(username)
+        } else {
+          const likes = post.likes.filter(like => like !== username)
+          post.likes = likes
+        }
+        return post
+      })
+
+      db.commit()
+      setLikes()
+    }
  
-    let rating = 3
-    let count = 42
     return (
-      <Box maxW="sm" mb={4} mt={4} borderWidth="1px" rounded="lg" overflow="hidden">
-       
+      <Box
+        maxW="sm"
+        mb={4}
+        mt={4}
+        borderWidth="1px"
+        rounded="lg"
+        overflow="hidden"
+      >
         <Box p="6">
-          <Box d="flex" alignItems="baseline">
+          <Box d="flex" alignItems="baseline" justifyContent="space-between">
             <Badge rounded="full" px="2" variantColor="teal">
               New
             </Badge>
+            <LikeButton likes={likes} ID={ID} handleLike={handleLike} />
           </Box>
-  
+
           <Box
             mt="1"
             fontWeight="semibold"
@@ -25,27 +50,19 @@ const Card = ({title, author}) => {
           >
             {title}
           </Box>
-  
+
           <Box>
             <Box as="span" color="gray.600" fontSize="sm">
-              By{" "} 
+              Founded By{" "}
             </Box>
-            {author}
+            {user}
           </Box>
-  
-          <Box d="flex" mt="2" alignItems="center">
-            {Array(5)
-              .fill("")
-              .map((_, i) => (
-                <Icon
-                name="star"
-                  key={i}
-                  color={i < rating ? "teal.500" : "gray.300"}
-                />
-              ))}
-            <Box as="span" ml="2" color="gray.600" fontSize="sm">
-              {count} reviews
+
+          <Box>
+            <Box as="span" color="gray.600" fontSize="sm">
+              Founders Interested{" "}
             </Box>
+            {likes.length}
           </Box>
         </Box>
       </Box>

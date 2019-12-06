@@ -26,7 +26,8 @@ export default class DataAccessDemo extends React.Component {
     if (!title) return 
     const post = {
       title: title,
-      user: this.props.username
+      user: this.props.username,
+      likes: [this.props.username]
     }
     db.insert("posts", post)
     db.commit()
@@ -43,7 +44,7 @@ export default class DataAccessDemo extends React.Component {
   
   }
 
-  fetchUserPosts() {
+  fetchUserPosts = () => {
     const posts = db.queryAll("posts", {
       query: { user: this.props.username }
     })
@@ -52,9 +53,10 @@ export default class DataAccessDemo extends React.Component {
 
   renderPosts() {
     const { posts } = this.state
+    const { username } = this.props
     if (!posts) return <Text>No posts yet</Text>
     return posts.map((post, index) => (
-      <Card title={post.title} author={post.user} key={index}></Card>
+      <Card {...post} key={index} username={username} setLikes={this.fetchUserPosts}></Card>
     ))
   }
 

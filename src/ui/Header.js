@@ -1,25 +1,33 @@
-import React from 'react'
+import React from "react"
 import { Box, Flex, Link, Text } from "@chakra-ui/core"
 import Logo from "./Logo"
 
-const Header = ({children}) => {
-
-    return <Flex
-         width="100%"
-         align="center"
-          justify="space-between"
-          direction="row"
-          p={4}
-          m={4}
-        >
-          <Logo />
-          <Flex direction="row">
-            {children}
+const Header = ({ children }) => {
+  return (
+    <Flex
+      width="100%"
+      align="center"
+      justify="space-between"
+      direction="row"
+      p={4}
+      m={4}
+    >
+      <Flex direction="row" align="center">
+        <Logo />
+        <Box>
+          <Flex direction="row" align="center">
+            <Link ml={4} href="/">
+              <Text>My Posts</Text>
+            </Link>
+            <Link ml={4} href="/all-posts">
+              <Text>All Posts</Text>
+            </Link>
           </Flex>
-        </Flex>
-      
-
-
+        </Box>
+      </Flex>
+      <Flex direction="row">{children}</Flex>
+    </Flex>
+  )
 }
 
 export default Header
