@@ -7,7 +7,7 @@ import { Box, Badge, Icon, Link } from "@chakra-ui/core";
 const Card = ({title, user, likes, ID, ratings, ...rest}) => {
     const { fetchPosts, username } = rest
 
-    const rating = ratings.length ? ratings.reduce((x = 0, y) => x + y) / ratings.length : 0
+    const rating = ratings.length ? Math.floor(ratings.reduce((x = 0, y) => x + y) / ratings.length) : 0
   
     const handleLike = (ID, isLikedByCurrentUser) => {
       if (!username) alert("Please sign in!")
